@@ -18,6 +18,7 @@ const PORT = process.env.PORT || 3000;
 // Lista de orígenes permitidos
 const allowedOrigins = [
   'https://front-end-archivo7.vercel.app', // URL del frontend en Vercel
+  'https://front-end-archivo7.vercel.app/', // Permitir también con slash al final
   'http://localhost:4200' // URL del frontend en local
 ];
 
