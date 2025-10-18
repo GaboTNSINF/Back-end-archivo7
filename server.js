@@ -13,10 +13,21 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// --- INICIO DE LA CORRECCIÓN DE CORS ---
+
+// Opciones de CORS para permitir solo a tu frontend de Vercel
+const corsOptions = {
+  origin: 'https://front-end-archivo7.vercel.app', // La URL de tu frontend
+  optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions)); // ¡Importante! Usamos las opciones aquí
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// --- FIN DE LA CORRECCIÓN DE CORS ---
+
 
 // Rutas de la API
 app.get('/', (req, res) => {
