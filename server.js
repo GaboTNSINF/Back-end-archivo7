@@ -11,29 +11,34 @@ require('dotenv').config();
 connectDB();
 
 const app = express();
+
+// Confiar en el proxy de Render para obtener la IP y el protocolo correctos
+app.set('trust proxy', 1);
+
 const PORT = process.env.PORT || 3000;
 
 // --- INICIO DE LA CORRECCIÓN DE CORS ---
 
-// Lista de orígenes permitidos
-const allowedOrigins = [
-  'https://front-end-archivo7.vercel.app', // URL del frontend en Vercel
-  'https://front-end-archivo7.vercel.app/', // Permitir también con slash al final
-  'http://localhost:4200' // URL del frontend en local
-];
-
 const corsOptions = {
   origin: (origin, callback) => {
-    // Permitir solicitudes sin 'origin' (como las de Postman o apps móviles) y las de la lista blanca
-    if (!origin || allowedOrigins.includes(origin)) {
+    const allowedOrigins = [
+      'https://front-end-archivo7.vercel.app',
+      'http://localhost:4200'
+    ];
+
+    // Normaliza el origen eliminando la barra final si existe.
+    const normalizedOrigin = origin ? origin.replace(/\/$/, '') : origin;
+
+    // Permite solicitudes de la lista blanca y solicitudes sin origen (como Postman).
+    if (!normalizedOrigin || allowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
     } else {
       callback(new Error('No permitido por CORS'));
     }
   },
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  credentials: true
 };
-
 
 // Middleware
 app.use(cors(corsOptions));
