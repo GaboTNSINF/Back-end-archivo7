@@ -15,14 +15,27 @@ const PORT = process.env.PORT || 3000;
 
 // --- INICIO DE LA CORRECCIÓN DE CORS ---
 
-// Opciones de CORS para permitir solo a tu frontend de Vercel
+// Lista de orígenes permitidos
+const allowedOrigins = [
+  'https://front-end-archivo7.vercel.app', // URL del frontend en Vercel
+  'http://localhost:4200' // URL del frontend en local
+];
+
 const corsOptions = {
-  origin: 'https://front-end-archivo7.vercel.app', // La URL de tu frontend
+  origin: (origin, callback) => {
+    // Permitir solicitudes sin 'origin' (como las de Postman o apps móviles) y las de la lista blanca
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  },
   optionsSuccessStatus: 200
 };
 
+
 // Middleware
-app.use(cors(corsOptions)); // ¡Importante! Usamos las opciones aquí
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
